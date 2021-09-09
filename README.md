@@ -1,37 +1,74 @@
-## Welcome to GitHub Pages
+import bs4 as bs
+import urllib.request
+import ui
+from PIL import Image
 
-You can use the [editor on GitHub](https://github.com/Carlosperez232310/basic_website/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+view=ui.View()
+view.background_color='pink'
+text=ui.TextView(alignment=True)
+view.add_subview(text)
+text.frame=45,350,300,60
+text.border_color=0.55, 0.55, 1.0
+text.border_width=6
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+close=ui.Button(10,10)
+view.add_subview(close)
+close.frame=20,40,40,40
+close.title='X'
+close.background_color=1.0, 0.81, 0.86
+close.tint_color=0.5, 0.5, 0.5
 
-### Markdown
+summary=ui.Button(600,600)
+view.add_subview(summary)
+summary.background_color=0.95, 0.66, 1.0
+summary.frame=100,150,200,50
+summary.title='Summary'
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+search=ui.Button(600,600)
+view.add_subview(search)
+search.background_color=0.95, 0.66, 1.0
+search.frame=100,250,200,50
+search.title='Search'
 
-```markdown
-Syntax highlighted code block
+def abutton_tapped(self):
+	search_view=ui.TextView(editable=False)
+	
+	search_view.background_color='white'
+	S2=text.text
+	source = urllib.request.urlopen('https://en.m.wikipedia.org/wiki/'+S2).read()
+	soup = bs.BeautifulSoup(source,'html.parser')
+	
+	for p in soup.find_all('p'):
+		for b in p.find_all('b'):
+			ps=p.text
+	search_view.text=ps
+	search_view.present('fullscreen')
 
-# Header 1
-## Header 2
-### Header 3
+def sbutton_tapped(self):
+	search_view=ui.TextView(editable=False)
+	
+	search_view.background_color='white'
+	S2=text.text
+	source = urllib.request.urlopen('https://en.m.wikipedia.org/wiki/'+S2).read()
+	soup = bs.BeautifulSoup(source,'html.parser')
+	
+	search_view.text=soup.text
+	search_view.present('fullscreen')
+	
+	
+def Xbutton_tapped(self):
+	view.close()
+	
+	
+summary.action=abutton_tapped
+search.action=sbutton_tapped	
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+#print(soup.find_all('p'))
 
-**Bold** and _Italic_ and `Code` text
+#for paragraph in soup.find_all('p'):
+	#print(paragraph.string)
+	#print(str(paragraph.text))
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Carlosperez232310/basic_website/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+close.action=Xbutton_tapped
+view.present('fullscreen',hide_title_bar=True)
